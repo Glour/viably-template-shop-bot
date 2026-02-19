@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://shopbot:shopbot123@db:5432/shopbot
+
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: shopbot
+      POSTGRES_USER: shopbot
+      POSTGRES_PASSWORD: shopbot123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
